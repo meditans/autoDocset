@@ -20,8 +20,7 @@ main = do
         $ grep (ends . text $ ".conf")
         $ fmap (format fp) $ lstree "/home/carlo/.stack/snapshots"
   let libString = foldl1' (<>) . intersperse " " $ libLocations
-  print libString
   void $ shell ("stack exec -- haddocset -t nuovo --no-global-packages create") empty
   void $ shell ("stack build --haddock") empty
-  void $ shell ("stack exec -- haddocset -t target.docset add " <> libString) empty
+  void $ shell ("stack exec -- haddocset -t nuovo.docset add " <> libString) empty
   void $ shell ("tar --exclude='.DS_Store' -cvzf nuovo.tgz nuovo.docset") empty
