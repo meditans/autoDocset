@@ -28,11 +28,12 @@ main = do
     $ grep (ends . text $ ".conf")
     $ format fp <$> lstree "/home/carlo/.stack/snapshots"
   let libString = foldl1' (<>) . intersperse " " $ libLocations
-  command ("stack exec -- haddocset -t " <> docsetName opt <> " --no-global-packages create")
+      newDocset = docsetName opt
+  command ("stack exec -- haddocset -t " <> newDocset <> " --no-global-packages create")
   command "stack build --haddock"
-  command ("stack exec -- haddocset -t " <> docsetName opt <> ".docset add " <> libString)
-  command ("tar --exclude='.DS_Store' -cvzf " <> docsetName opt <> ".tgz " <> docsetName opt <> ".docset")
-  command ("rm -r " <> docsetName opt <> ".docset")
+  command ("stack exec -- haddocset -t " <> newDocset <> ".docset add " <> libString)
+  command ("tar --exclude='.DS_Store' -cvzf " <> newDocset <> ".tgz " <> newDocset <> ".docset")
+  command ("rm -r " <> newDocset <> ".docset")
 
 command :: MonadIO m => Text -> m ()
 command c = void (shell c empty)
